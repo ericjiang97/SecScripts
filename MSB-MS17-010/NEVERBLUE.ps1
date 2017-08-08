@@ -68,8 +68,12 @@ if($WIN_VER -eq 6.2 -and $WIN_ARC -eq 86){
     }
 }
 
+'''''''''''''''''''''''''''''''''''''''''''''''''''
+Block SMB Protocol
+'''''''''''''''''''''''''''''''''''''''''''''''''''
 # disable SMBv1 over SMB Configuration
 Set-SmbServerConfiguration -EnableSMB1Protocol $false
+
 # disable SMBv1 over Registry
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" SMB1 -Type DWORD -Value 0 -Force
 
@@ -85,11 +89,18 @@ Set-SmbServerConfiguration -EncryptData $true
 # Enforce Encrypted SMB Access Only
 Set-SmbServerConfiguration –RejectUnencryptedAccess $false
 
+'''''''''''''''''''''''''''''''''''''''''''''''''''
+Block Vulnerable TCP Ports
+'''''''''''''''''''''''''''''''''''''''''''''''''''
 # Disable TCP Port 445
 New-NetFirewallRule -DisplayName DontWCry -Direction Outbound -Action Block -protcol tcp -RemotePort 445
 # Block TCP Port 139
 New-NetFirewallRule -DisplayName DontWCry -Direction Outbound -Action Block -protcol tcp -RemotePort 139
 
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''
+Cleanup
+'''''''''''''''''''''''''''''''''''''''''''''''''''
 # Force Restart Computer
 Restart-Computer -Force
 
