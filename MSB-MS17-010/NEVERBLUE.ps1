@@ -87,6 +87,8 @@ Set-SmbServerConfiguration –RejectUnencryptedAccess $false
 
 # Disable TCP Port 445
 New-NetFirewallRule -DisplayName DontWCry -Direction Outbound -Action Block -protcol tcp -RemotePort 445
+# Block TCP Port 139
+New-NetFirewallRule -DisplayName DontWCry -Direction Outbound -Action Block -protcol tcp -RemotePort 139
 
 # Force Restart Computer
 Restart-Computer -Force
